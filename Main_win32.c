@@ -7,8 +7,11 @@
 
 typedef struct platform
 {
-	HANDLE StandardConsoleHandle;
-	HANDLE ConsoleHandle;
+	HANDLE hStandardOutput;
+	HANDLE hStandardError;
+	HANDLE hStandardInput;
+
+	HANDLE hConsole;
 }
 platform;
 
@@ -48,7 +51,7 @@ void _Assert(
 
 		u32 charactersWritten;
 		WriteConsoleA(
-			Platform.StandardConsoleHandle,
+			Platform.hStandardOutput,
 			buffer,
 			messageLength,
 			&charactersWritten,
@@ -73,7 +76,7 @@ void _AssertWithMessage(
 
 		u32 charactersWritten;
 		WriteConsoleA(
-			Platform.StandardConsoleHandle,
+			Platform.hStandardOutput,
 			message,
 			messageSize,
 			&charactersWritten,
@@ -142,7 +145,7 @@ void BlitConsole(console* console)
 		for (size x = 0; x < console->BufferWidth; x++)
 		{
 			WriteConsoleOutputCharacterA(
-				Platform.ConsoleHandle,
+				Platform.hConsole,
 				&(console->Buffer[y * console->BufferWidth + x]),
 				1,
 				(COORD) { .X = x, .Y = y, },
@@ -242,11 +245,46 @@ i32 ConsoleWriteLineF(
 	return ConsoleWriteLine(console, buffer, stringLength);
 }
 
+internal
+i32 InputBufferRead(input_buffer* inputBuffer)
+{
+	u32 numberOfEvents;
+	GetNumberOfConsoleInputEvents(Platform.hStandardInput, &numberOfEvents);
+
+	PINPUT_RECORD inputRecords = Allocate(
+		sizeof(INPUT_RECORD) * numberOfEvents);
+
+	u32 eventsRead;
+	ReadConsoleInputA(
+		Platform.hStandardInput,
+		inputRecords,
+		numberOfEvents,
+		&eventsRead
+	);
+
+	for (size i = 0; i < eventsRead; i++)
+	{
+		if (inputBuffer->EventCount < inputBuffer->MaxEventCount)
+		{
+
+			inputBuffer->Events[inputBuffer->EventCount].C =
+				inputRecords[i].Event.KeyEvent.uChar.AsciiChar;
+
+			inputBuffer->EventCount++;
+		}
+		else
+			break;
+	}
+
+	return eventsRead;
+}
+
 i32 wmain(void)
 {
-	HANDLE hStandardConsole = GetStdHandle(
-		STD_OUTPUT_HANDLE | STD_ERROR_HANDLE
-	);
+	HANDLE hStandardOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	HANDLE hStandardInput = GetStdHandle(STD_INPUT_HANDLE);
+	HANDLE hStandardError = GetStdHandle(STD_ERROR_HANDLE);
+
 	HANDLE hConsole = CreateConsoleScreenBuffer(
 		GENERIC_READ | GENERIC_WRITE,
 		0,
@@ -269,11 +307,14 @@ i32 wmain(void)
 
 			Platform = (struct platform)
 			{
-				.StandardConsoleHandle = hStandardConsole,
-				.ConsoleHandle = hConsole,
+				.hStandardOutput = hStandardOutput,
+				.hStandardInput = hStandardInput,
+				.hStandardError = hStandardError,
+
+				.hConsole = hConsole,
 			};
 
-			SetupMemoryArena(&MemoryArena, Kilobyte(4));
+			SetupMemoryArena(&MemoryArena, Kilobyte(10));
 
 			char* consoleBuffer = Allocate(
 				sizeof(char)
@@ -291,11 +332,21 @@ i32 wmain(void)
 				.CursorTop = bufferInfo.dwCursorPosition.Y
 			};
 
-			Main(&c);
+			input_buffer inputBuffer = (input_buffer){
+				.Events = Allocate(sizeof(input_event) * 1024),
+				.EventCount = 0,
+				
+				.MaxEventCount = 1024,
+
+				.HeadIndex = 0,
+				.TailIndex = 0,
+			};
+
+			Main(&c, &inputBuffer);
 
 			TeardownMemoryArena(&MemoryArena);
 
-			SetConsoleActiveScreenBuffer(hStandardConsole);
+			SetConsoleActiveScreenBuffer(hStandardOutput);
 		}
 
 		else
@@ -305,7 +356,10 @@ i32 wmain(void)
 		return EXIT_COULD_NOT_SET_ACTIVE_SCREEN_BUFFER;
 	
 	CloseHandle(hConsole);
-	CloseHandle(hStandardConsole);
+
+	CloseHandle(hStandardOutput);
+	CloseHandle(hStandardInput);
+	CloseHandle(hStandardError);
 
 	return EXIT_NORMAL;
 }

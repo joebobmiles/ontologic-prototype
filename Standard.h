@@ -111,6 +111,14 @@ typedef long double	__ontologic_float128;
 */
 
 /*
+	BEGIN UTILITY MACROS
+*/
+#define forever while (1)
+/*
+	END UTILITY MACROS
+*/
+
+/*
 	BEGIN STANDARD LIBRARY MACROS
 */
 #define Abs(n) ((n * (n >= 0)) + (n * -1 * (n < 0)))
