@@ -4,20 +4,19 @@
 internal
 void Main(console* console, input_buffer* inputBuffer)
 {
-	forever
+	bool quit = 0;
+
+	while (!quit)
 	{
 		InputBufferRead(inputBuffer);
-		input_event* event = PopInputEventFrom(inputBuffer);
 
-		if (event)
+		if (0 < inputBuffer->EventCount)
 		{
-			if (event->KeyDown)
-				ConsoleWriteLine(console, "Key down!", 9);
+			input_event* event = PopInputEventFrom(inputBuffer);
 
-			else if (event->KeyUp)
-				ConsoleWriteLine(console, "Key up!", 7);
+			if (event->KeyUp && event->C == 'q')
+				quit = 1;
 		}
-
 
 		BlitConsole(console);
 	}

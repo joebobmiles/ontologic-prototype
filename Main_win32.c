@@ -283,6 +283,8 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 		&eventsRead
 	);
 
+	inputBuffer->EventCount = 0;
+
 	for (size i = 0; i < eventsRead; i++)
 	{
 		if (
