@@ -33,6 +33,14 @@ void _Assert(
 	_Assert( \
 		(P), #P, sizeof(#P)-1, __FILE__, sizeof(__FILE__)-1, __LINE__ \
 	)
+
+void _AssertWithMessage(
+	const bool, const char*, const size
+);
+#define AssertWithMessage(P, M) \
+	_AssertWithMessage( \
+		(P), "Assertion failed: " ## M, sizeof("Assertion failed: " ## M) \
+	)
 /*
 	END ASSERT & ABORT
 */

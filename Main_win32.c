@@ -22,7 +22,7 @@ void Exit(exit_code code)
 
 internal
 void _Assert(
-	const bool result,
+	const bool predicate,
 	const char* expression,
 	const size expressionLength,
 	const char* fileName,
@@ -30,7 +30,7 @@ void _Assert(
 	const size line
 )
 {
-	if (!result)
+	if (!predicate)
 	{
 		char buffer[1024];
 		char message[] =
@@ -60,6 +60,30 @@ void _Assert(
 	}
 }
 
+internal
+void _AssertWithMessage(
+	bool predicate,
+	const char* message,
+	const size messageSize
+)
+{
+	if (!predicate)
+	{
+		OutputDebugStringA(message);
+
+		u32 charactersWritten;
+		WriteConsoleA(
+			Platform.StandardConsoleHandle,
+			message,
+			messageSize,
+			&charactersWritten,
+			NULL
+		);
+
+		Exit(EXIT_ASSERT_FAILED);
+	}
+}
+
 global memory_arena MemoryArena;
 
 internal
@@ -72,7 +96,10 @@ void SetupMemoryArena(memory_arena* arena, const size arenaSize)
 		PAGE_READWRITE
 	);
 
-	Assert(arena->Start != NULL);
+	AssertWithMessage(
+		arena->Start != NULL,
+		"Not enough memory available to initialize."
+	);
 
 	arena->Cursor = arena->Start;
 	arena->Size = arenaSize;
@@ -201,8 +228,6 @@ i32 ConsoleWriteLineF(
 
 i32 wmain(void)
 {
-	SetupMemoryArena(&MemoryArena, Kilobyte(4));
-
 	HANDLE hStandardConsole = GetStdHandle(
 		STD_OUTPUT_HANDLE | STD_ERROR_HANDLE
 	);
@@ -232,6 +257,8 @@ i32 wmain(void)
 				.ConsoleHandle = hConsole,
 			};
 
+			SetupMemoryArena(&MemoryArena, Kilobyte(3));
+
 			char* consoleBuffer = Allocate(
 				sizeof(char)
 				* bufferInfo.dwMaximumWindowSize.X
@@ -249,6 +276,10 @@ i32 wmain(void)
 			};
 
 			Main(&c);
+
+			TeardownMemoryArena(&MemoryArena);
+
+			SetConsoleActiveScreenBuffer(hStandardConsole);
 		}
 
 		else
@@ -256,13 +287,9 @@ i32 wmain(void)
 	}
 	else
 		return EXIT_COULD_NOT_SET_ACTIVE_SCREEN_BUFFER;
-
-	TeardownMemoryArena(&MemoryArena);
 	
-	SetConsoleActiveScreenBuffer(hStandardConsole);
-
-	CloseHandle(hStandardConsole);
 	CloseHandle(hConsole);
+	CloseHandle(hStandardConsole);
 
 	return EXIT_NORMAL;
 }
