@@ -58,7 +58,6 @@ void _Assert(
 			NULL
 		);
 
-
 		Exit(EXIT_ASSERT_FAILED);
 	}
 }
@@ -85,6 +84,23 @@ void _AssertWithMessage(
 
 		Exit(EXIT_ASSERT_FAILED);
 	}
+}
+
+internal
+void _Abort(exit_code code, const char* message, const size messageSize)
+{
+	OutputDebugStringA(message);
+
+	u32 charactersWritten;
+	WriteConsoleA(
+		Platform.hStandardOutput,
+		message,
+		messageSize,
+		&charactersWritten,
+		NULL
+	);
+
+	Exit(code);
 }
 
 global memory_arena MemoryArena;
@@ -131,7 +147,10 @@ void* Allocate(const size allocationSize)
 	}
 	else
 	{
-		Exit(EXIT_SYSTEM_OUT_OF_MEMORY);
+		Abort(
+			EXIT_SYSTEM_OUT_OF_MEMORY,
+			"Ran out of available memory."
+		);
 	}
 }
 

@@ -4,14 +4,6 @@
 internal
 void Main(console* console, input_buffer* inputBuffer)
 {
-	ConsoleWriteLineF(
-		console,
-		"Your secret number is: %i.", 26,
-		42
-	);
-
-	ConsoleWriteLine(console, "Goodbye.", 8);
-
 	forever
 	{
 		InputBufferRead(inputBuffer);

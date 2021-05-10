@@ -41,6 +41,9 @@ void _AssertWithMessage(
 	_AssertWithMessage( \
 		(P), "Assertion failed: " ## M, sizeof("Assertion failed: " ## M) \
 	)
+
+void _Abort(exit_code, const char*, const size);
+#define Abort(C, M) _Abort(C, "Abort: " ## M, sizeof("Abort: " ## M))
 /*
 	END ASSERT & ABORT
 */
