@@ -251,8 +251,10 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 	u32 numberOfEvents;
 	GetNumberOfConsoleInputEvents(Platform.hStandardInput, &numberOfEvents);
 
-	PINPUT_RECORD inputRecords = Allocate(
-		sizeof(INPUT_RECORD) * numberOfEvents);
+	persist PINPUT_RECORD inputRecords = NULL;
+	
+	if (inputRecords == NULL)
+		inputRecords = Allocate(sizeof(INPUT_RECORD) * numberOfEvents);
 
 	u32 eventsRead;
 	ReadConsoleInputA(
@@ -264,11 +266,17 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 
 	for (size i = 0; i < eventsRead; i++)
 	{
-		if (inputBuffer->EventCount < inputBuffer->MaxEventCount)
+		if (
+			inputBuffer->EventCount < inputBuffer->MaxEventCount
+			&& inputRecords[i].EventType == KEY_EVENT
+		)
 		{
-
 			inputBuffer->Events[inputBuffer->EventCount].C =
 				inputRecords[i].Event.KeyEvent.uChar.AsciiChar;
+			inputBuffer->Events[inputBuffer->EventCount].KeyDown =
+				inputRecords[i].Event.KeyEvent.bKeyDown;
+			inputBuffer->Events[inputBuffer->EventCount].KeyUp =
+				!inputRecords[i].Event.KeyEvent.bKeyDown;
 
 			inputBuffer->EventCount++;
 		}
@@ -277,6 +285,14 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 	}
 
 	return eventsRead;
+}
+
+internal
+input_event* PopInputEventFrom(input_buffer* inputBuffer)
+{
+	return inputBuffer->EventCount
+		? &inputBuffer->Events[--inputBuffer->EventCount]
+		: NULL;
 }
 
 i32 wmain(void)

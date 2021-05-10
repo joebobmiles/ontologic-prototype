@@ -15,9 +15,17 @@ void Main(console* console, input_buffer* inputBuffer)
 	forever
 	{
 		InputBufferRead(inputBuffer);
+		input_event* event = PopInputEventFrom(inputBuffer);
 
-		if (0 < inputBuffer->EventCount)
-			ConsoleWriteLine(console, "Key pressed!", 12);
+		if (event)
+		{
+			if (event->KeyDown)
+				ConsoleWriteLine(console, "Key down!", 9);
+
+			else if (event->KeyUp)
+				ConsoleWriteLine(console, "Key up!", 7);
+		}
+
 
 		BlitConsole(console);
 	}

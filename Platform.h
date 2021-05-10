@@ -94,6 +94,8 @@ void BlitConsole(console*);
 typedef struct input_event
 {
 	char C;
+	bool KeyDown;
+	bool KeyUp;
 }
 input_event;
 
