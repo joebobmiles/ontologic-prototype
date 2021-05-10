@@ -82,6 +82,23 @@ i32 ConsoleWrite(console*, const char*, const size);
 i32 ConsoleWriteF(console*, const char*, const size, ...);
 i32 ConsoleWriteLine(console*, const char*, const size);
 i32 ConsoleWriteLineF(console*, const char*, const size, ...);
+
+void BlitConsole(console*);
+
+typedef struct input_event
+{
+	char c;
+}
+input_event;
+
+typedef struct input_buffer
+{
+	input_event* events;
+	size eventCount;
+}
+input_buffer;
+
+i32 InputBufferRead(input_buffer*);
 /*
 	END CONSOLE
 */

@@ -133,24 +133,51 @@ void* Allocate(const size allocationSize)
 }
 
 internal
+void BlitConsole(console* console)
+{
+	i32 charactersWritten;
+
+	for (size y = 0; y < console->BufferHeight; y++)
+	{
+		for (size x = 0; x < console->BufferWidth; x++)
+		{
+			WriteConsoleOutputCharacterA(
+				Platform.ConsoleHandle,
+				&(console->Buffer[y * console->BufferWidth + x]),
+				1,
+				(COORD) { .X = x, .Y = y, },
+				&charactersWritten
+			);
+		}
+	}
+}
+
+internal
 i32 ConsoleWrite(
 	console* console,
 	const char* string,
 	const size stringLength
 )
 {
-	i32 charactersWritten;
+	i32 charactersWritten = 0;
 
-	WriteConsoleOutputCharacterA(
-		Platform.ConsoleHandle,
-		string,
-		stringLength,
-		(COORD) {
-			.X = console->CursorLeft,
-			.Y = console->CursorTop,
-		},
-		&charactersWritten
-	);
+	size cursorLeft = console->CursorLeft;
+	size cursorTop = console->CursorTop;
+	
+	for (size i = 0; i < stringLength; i++)
+	{
+		size left = cursorLeft + i;
+		size top = cursorTop;
+
+		if (left < console->BufferWidth)
+		{
+			console->Buffer[top * console->BufferWidth + left] = string[i];
+			charactersWritten++;
+		}
+
+		else
+			break;
+	}
 
 	return charactersWritten;
 }
@@ -162,18 +189,7 @@ i32 ConsoleWriteLine(
 	const size stringLength
 )
 {
-	i32 charactersWritten;
-
-	WriteConsoleOutputCharacterA(
-		Platform.ConsoleHandle,
-		string,
-		stringLength,
-		(COORD) {
-			.X = console->CursorLeft,
-			.Y = console->CursorTop,
-		},
-		&charactersWritten
-	);
+	i32 charactersWritten = ConsoleWrite(console, string, stringLength);
 
 	console->CursorTop++;
 
@@ -257,7 +273,7 @@ i32 wmain(void)
 				.ConsoleHandle = hConsole,
 			};
 
-			SetupMemoryArena(&MemoryArena, Kilobyte(3));
+			SetupMemoryArena(&MemoryArena, Kilobyte(4));
 
 			char* consoleBuffer = Allocate(
 				sizeof(char)

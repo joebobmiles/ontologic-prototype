@@ -12,5 +12,8 @@ void Main(console* console)
 
 	ConsoleWriteLine(console, "Goodbye.", 8);
 
-	while (1) { }
+	while (1)
+	{
+		BlitConsole(console);
+	}
 }
