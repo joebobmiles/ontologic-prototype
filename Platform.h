@@ -43,7 +43,7 @@ void _AssertWithMessage(
 	)
 
 void _Abort(exit_code, const char*, const size);
-#define Abort(C, M) _Abort(C, "Abort: " ## M, sizeof("Abort: " ## M))
+#define Abort(C, M) _Abort(C, "Aborted: " ## M, sizeof("Aborted: " ## M))
 /*
 	END ASSERT & ABORT
 */
