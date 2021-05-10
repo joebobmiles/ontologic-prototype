@@ -370,7 +370,7 @@ i32 wmain(void)
 			input_buffer inputBuffer = (input_buffer){
 				.Events = Allocate(sizeof(input_event) * 1024),
 				.EventCount = 0,
-				
+
 				.MaxEventCount = 1024,
 
 				.HeadIndex = 0,
@@ -385,10 +385,20 @@ i32 wmain(void)
 		}
 
 		else
-			return EXIT_COULD_NOT_GET_SCREEN_BUFFER_INFO;
+		{
+			Abort(
+				EXIT_COULD_NOT_GET_SCREEN_BUFFER_INFO,
+				"Unable to retreive screen buffer size."
+			);
+		}
 	}
 	else
-		return EXIT_COULD_NOT_SET_ACTIVE_SCREEN_BUFFER;
+	{
+		Abort(
+			EXIT_COULD_NOT_SET_ACTIVE_SCREEN_BUFFER,
+			"Unable to change screen buffer from standard input."
+		);
+	}
 	
 	CloseHandle(hConsole);
 
