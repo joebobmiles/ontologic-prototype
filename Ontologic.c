@@ -11,6 +11,8 @@ void Main(console* console, input_buffer* inputBuffer)
 
 	until (quit == true)
 	{
+		ClearConsole(console);
+
 		ConsoleWrite(console, buffer, i);
 
 		InputBufferRead(inputBuffer);
@@ -24,8 +26,14 @@ void Main(console* console, input_buffer* inputBuffer)
 
 				else if (event->KeyDown)
 				{
-					char c = KeycodeToChar(event->Key);
-					if (c != '\0') buffer[i++] = c;
+					if (event->Key == KEY_BACKSPACE)
+						buffer[0 < i ? --i : i] = '\0';
+
+					else
+					{
+						char c = KeycodeToChar(event->Key);
+						if (c != '\0') buffer[i++] = c;
+					}
 				}
 			}
 		}

@@ -175,6 +175,14 @@ void BlitConsole(console* console)
 }
 
 internal
+void ClearConsole(console* console)
+{
+	for (size y = 0; y < console->BufferHeight; y++)
+		for (size x = 0; x < console->BufferWidth; x++)
+			console->Buffer[y * console->BufferWidth + x] = '\0';
+}
+
+internal
 i32 ConsoleWrite(
 	console* console,
 	const char* string,
@@ -316,6 +324,9 @@ keycode VirtualKeyToKeyCode(WORD virtualKey)
 
 	case VK_SPACE:
 		return KEY_SPACE;
+	
+	case VK_BACK:
+		return KEY_BACKSPACE;
 
 	case 0x41:
 		return KEY_A;
