@@ -8,6 +8,7 @@ struct platform;
 /*
 	BEGIN EXIT
 */
+
 typedef enum exit_code
 {
 	EXIT_NORMAL,
@@ -18,7 +19,13 @@ typedef enum exit_code
 }
 exit_code;
 
+/**
+ * Exits the process with the given exit code.
+ * 
+ * @param[in]	exitCode	The code to return with.
+ */
 void Exit(exit_code);
+
 /*
 	END EXIT
 */
@@ -26,17 +33,52 @@ void Exit(exit_code);
 /*
 	BEGIN ASSERT & ABORT
 */
+
+/**
+ * The underlying function to use when Asserts are enabled. This is not intended
+ * to be invoked on its own. Instead, use the Assert macro.
+ * 
+ * @param[in]	predicate				The predicate to verify.
+ * @param[in]	predicateString			The predicate as string.
+ * @param[in]	predicateStringLength	The length of the predicate string.
+ * @param[in]	filepath				The path to the file containing the assertion.
+ * @param[in]	filepathLength			The length of the filepath string.
+ * @param[in]	line					The line of the file the assertion is on.
+ */
 void _Assert(
 	const bool, const char*, const size, const char*, const size, const size
 );
+
+/**
+ * Asserts that the given predicate is true. If false, causes the process to 
+ * exit with ERROR_ASSERT_FAILED.
+ * 
+ * @param[in]	predicate	The predicate to verify.
+ */
 #define Assert(P) \
 	_Assert( \
 		(P), #P, sizeof(#P)-1, __FILE__, sizeof(__FILE__)-1, __LINE__ \
 	)
 
+/**
+ * The underlying function to use when assertions are enabled. This is not
+ * intended to be invoked on its own. Instead, use the AssertWithMessage macro.
+ *
+ * @param[in]	predicate		The predicate to verify.
+ * @param[in]	message			The message to display on failed assertion.
+ * @param[in]	messageLength	The length of the given message.
+ */
 void _AssertWithMessage(
 	const bool, const char*, const size
 );
+
+/**
+ * Asserts that the given predicate is true. If false, the process will exit
+ * with ERROR_ASSERT_FAILED and print out the given message.
+ * 
+ * @param[in]	predicate	The predicate to verify.
+ * @param[in]	message		The message to display on assertion failure.
+ */
 #define AssertWithMessage(P, M) \
 	_AssertWithMessage( \
 		(P), "Assertion failed: " ## M, sizeof("Assertion failed: " ## M) \
@@ -147,23 +189,38 @@ typedef enum keycode
 }
 keycode;
 
+/*
+Represents a single input event received from the host system.
+*/
 typedef struct input_event
 {
+	/* The virtual key code that we received. */
 	keycode Key;
+	/* True when the key is down, false when the key is up. */
 	bool KeyDown;
+	/* True when the key is up, false when the key is down. */
 	bool KeyUp;
 
+	/* The character that was typed. */
 	char Character;
 }
 input_event;
 
+/*
+A circular buffer that stores input events received from the host system.
+*/
 typedef struct input_buffer
 {
+	/* The events we received from the host. */
 	input_event* Events;
+	/* The number of events we are storing. */
 	size EventCount;
+	/* The maximum number of events that can be stored in the buffer. */
 	size MaxEventCount;
 
+	/* The index to the head of the buffer. */
 	size HeadIndex;
+	/* The index to the tail of the buffer. */
 	size TailIndex;
 }
 input_buffer;

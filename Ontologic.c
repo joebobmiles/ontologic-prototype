@@ -1,8 +1,13 @@
 #include "Standard.h"
 #include "Platform.h"
 
-internal
-void Main(console* console, input_buffer* inputBuffer)
+/**
+ * This is the main function that runs the Ontologic runtime.
+ * 
+ * @param[in] console		A pointer to the console instance to write to.
+ * @param[in] inputBuffer	A pointer to the buffer used for receiving input events.
+ */
+internal void Main(console* console, input_buffer* inputBuffer)
 {
 	bool quit = false;
 
