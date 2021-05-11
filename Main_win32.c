@@ -292,12 +292,11 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 			&& inputRecords[i].EventType == KEY_EVENT
 		)
 		{
-			inputBuffer->Events[inputBuffer->EventCount].C =
-				inputRecords[i].Event.KeyEvent.uChar.AsciiChar;
-			inputBuffer->Events[inputBuffer->EventCount].KeyDown =
-				inputRecords[i].Event.KeyEvent.bKeyDown;
-			inputBuffer->Events[inputBuffer->EventCount].KeyUp =
-				!inputRecords[i].Event.KeyEvent.bKeyDown;
+			inputBuffer->Events[inputBuffer->EventCount] = (input_event){
+				.C = inputRecords[i].Event.KeyEvent.uChar.AsciiChar,
+				.KeyDown = inputRecords[i].Event.KeyEvent.bKeyDown,
+				.KeyUp = !inputRecords[i].Event.KeyEvent.bKeyDown,
+			};
 
 			inputBuffer->EventCount++;
 		}
