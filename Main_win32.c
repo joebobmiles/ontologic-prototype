@@ -177,9 +177,8 @@ void BlitConsole(console* console)
 internal
 void ClearConsole(console* console)
 {
-	for (size y = 0; y < console->BufferHeight; y++)
-		for (size x = 0; x < console->BufferWidth; x++)
-			console->Buffer[y * console->BufferWidth + x] = '\0';
+	for (size i = 0; i < console->BufferHeight * console->BufferWidth; i++)
+		console->Buffer[i] = '\0';
 }
 
 internal
