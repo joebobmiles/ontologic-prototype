@@ -30,10 +30,7 @@ void Main(console* console, input_buffer* inputBuffer)
 						buffer[0 < i ? --i : i] = '\0';
 
 					else
-					{
-						char c = KeycodeToChar(event->Key);
-						if (c != '\0') buffer[i++] = c;
-					}
+						buffer[i++] = event->Character;
 				}
 			}
 		}

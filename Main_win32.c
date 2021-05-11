@@ -302,6 +302,8 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 				),
 				.KeyDown = inputRecords[i].Event.KeyEvent.bKeyDown,
 				.KeyUp = !inputRecords[i].Event.KeyEvent.bKeyDown,
+
+				.Character = inputRecords[i].Event.KeyEvent.uChar.AsciiChar,
 			};
 
 			inputBuffer->EventCount++;
@@ -437,18 +439,6 @@ keycode VirtualKeyToKeyCode(WORD virtualKey)
 
 	default:
 		return KEY_NONE;
-	}
-}
-
-internal
-char KeycodeToChar(keycode key)
-{
-	switch (key)
-	{
-	#define _(CODE, CHAR) case CODE: return CHAR;
-		KEYCODES
-	#undef _
-	default: return '\0';
 	}
 }
 

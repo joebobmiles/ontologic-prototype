@@ -96,62 +96,64 @@ void ClearConsole(console*);
 	BEGIN INPUT EVENTS
 */
 #define KEYCODES \
-	_(KEY_NONE, '\0') \
-	_(KEY_ESCAPE, '\0') \
-	_(KEY_SPACE, ' ') \
-	_(KEY_BACKSPACE, '\0') \
-	_(KEY_A, 'a') \
-	_(KEY_B, 'b') \
-	_(KEY_C, 'c') \
-	_(KEY_D, 'd') \
-	_(KEY_E, 'e') \
-	_(KEY_F, 'f') \
-	_(KEY_G, 'g') \
-	_(KEY_H, 'h') \
-	_(KEY_I, 'i') \
-	_(KEY_J, 'j') \
-	_(KEY_K, 'k') \
-	_(KEY_L, 'l') \
-	_(KEY_M, 'm') \
-	_(KEY_N, 'n') \
-	_(KEY_O, 'o') \
-	_(KEY_P, 'p') \
-	_(KEY_Q, 'q') \
-	_(KEY_R, 'r') \
-	_(KEY_S, 's') \
-	_(KEY_T, 't') \
-	_(KEY_U, 'u') \
-	_(KEY_V, 'v') \
-	_(KEY_W, 'w') \
-	_(KEY_X, 'x') \
-	_(KEY_Y, 'y') \
-	_(KEY_Z, 'z') \
-	_(KEY_0, '0') \
-	_(KEY_1, '1') \
-	_(KEY_2, '2') \
-	_(KEY_3, '3') \
-	_(KEY_4, '4') \
-	_(KEY_5, '5') \
-	_(KEY_6, '6') \
-	_(KEY_7, '7') \
-	_(KEY_8, '8') \
-	_(KEY_9, '9')
+	_(KEY_NONE) \
+	_(KEY_ESCAPE) \
+	_(KEY_SPACE) \
+	_(KEY_BACKSPACE) \
+\
+	_(KEY_A) \
+	_(KEY_B) \
+	_(KEY_C) \
+	_(KEY_D) \
+	_(KEY_E) \
+	_(KEY_F) \
+	_(KEY_G) \
+	_(KEY_H) \
+	_(KEY_I) \
+	_(KEY_J) \
+	_(KEY_K) \
+	_(KEY_L) \
+	_(KEY_M) \
+	_(KEY_N) \
+	_(KEY_O) \
+	_(KEY_P) \
+	_(KEY_Q) \
+	_(KEY_R) \
+	_(KEY_S) \
+	_(KEY_T) \
+	_(KEY_U) \
+	_(KEY_V) \
+	_(KEY_W) \
+	_(KEY_X) \
+	_(KEY_Y) \
+	_(KEY_Z) \
+\
+	_(KEY_0) \
+	_(KEY_1) \
+	_(KEY_2) \
+	_(KEY_3) \
+	_(KEY_4) \
+	_(KEY_5) \
+	_(KEY_6) \
+	_(KEY_7) \
+	_(KEY_8) \
+	_(KEY_9)
 
 typedef enum keycode
 {
-#define _(CODE, CHAR) CODE,
+#define _(CODE) CODE,
 	KEYCODES
 #undef _
 }
 keycode;
-
-char KeycodeToChar(keycode);
 
 typedef struct input_event
 {
 	keycode Key;
 	bool KeyDown;
 	bool KeyUp;
+
+	char Character;
 }
 input_event;
 
