@@ -8,8 +8,9 @@ void Main(console* console, input_buffer* inputBuffer)
 
 	until (quit == true)
 	{
-		InputBufferRead(inputBuffer);
+		ConsoleWrite(console, "Hello, World!", 13);
 
+		InputBufferRead(inputBuffer);
 		if (0 < inputBuffer->EventCount)
 		{
 			input_event* event = PopInputEventFrom(inputBuffer);
