@@ -290,7 +290,9 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 		)
 		{
 			inputBuffer->Events[inputBuffer->EventCount] = (input_event){
-				.C = inputRecords[i].Event.KeyEvent.uChar.AsciiChar,
+				.Key = VirtualKeyToKeyCode(
+					inputRecords[i].Event.KeyEvent.wVirtualKeyCode
+				),
 				.KeyDown = inputRecords[i].Event.KeyEvent.bKeyDown,
 				.KeyUp = !inputRecords[i].Event.KeyEvent.bKeyDown,
 			};
@@ -302,6 +304,109 @@ i32 InputBufferRead(input_buffer* inputBuffer)
 	}
 
 	return eventsRead;
+}
+
+internal
+keycode VirtualKeyToKeyCode(WORD virtualKey)
+{
+	switch (virtualKey)
+	{
+	case VK_ESCAPE:
+		return KEY_ESCAPE;
+
+	case 0x41:
+		return KEY_A;
+
+	case 0x42:
+		return KEY_B;
+
+	case 0x43:
+		return KEY_C;
+
+	case 0x44:
+		return KEY_D;
+
+	case 0x45:
+		return KEY_E;
+
+	case 0x46:
+		return KEY_F;
+
+	case 0x47:
+		return KEY_G;
+
+	case 0x48:
+		return KEY_H;
+
+	case 0x49:
+		return KEY_I;
+
+	case 0x4a:
+		return KEY_J;
+
+	case 0x4b:
+		return KEY_K;
+
+	case 0x4c:
+		return KEY_L;
+
+	case 0x4d:
+		return KEY_M;
+
+	case 0x4e:
+		return KEY_N;
+
+	case 0x4f:
+		return KEY_O;
+
+	case 0x50:
+		return KEY_P;
+
+	case 0x51:
+		return KEY_Q;
+
+	case 0x52:
+		return KEY_R;
+
+	case 0x53:
+		return KEY_S;
+
+	case 0x54:
+		return KEY_T;
+
+	case 0x55:
+		return KEY_U;
+
+	case 0x56:
+		return KEY_V;
+
+	case 0x57:
+		return KEY_W;
+
+	case 0x58:
+		return KEY_X;
+
+	case 0x59:
+		return KEY_Y;
+
+	case 0x5a:
+		return KEY_Z;
+
+	default:
+		return KEY_NONE;
+	}
+}
+
+internal
+char KeycodeToChar(keycode key)
+{
+	switch (key)
+	{
+	#define _(CODE, CHAR) case CODE: return CHAR;
+		KEYCODES
+	#undef _
+	default: return '\0';
+	}
 }
 
 internal
@@ -366,7 +471,7 @@ i32 wmain(void)
 			};
 
 			input_buffer inputBuffer = (input_buffer){
-				.Events = Allocate(sizeof(input_event) * 1024),
+				.Events = Allocate(sizeof(input_event) * 32),
 				.EventCount = 0,
 
 				.MaxEventCount = 1024,

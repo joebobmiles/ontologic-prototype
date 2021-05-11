@@ -19,11 +19,11 @@ void Main(console* console, input_buffer* inputBuffer)
 			input_event* event;
 			until((event = PopInputEventFrom(inputBuffer)) == NULL)
 			{
-				if (event->KeyUp && event->C == 'q')
+				if (event->KeyUp && event->Key == KEY_ESCAPE)
 					quit = true;
 
 				else if (event->KeyDown)
-					buffer[i++] = event->C;
+					buffer[i++] = KeycodeToChar(event->Key);
 			}
 		}
 

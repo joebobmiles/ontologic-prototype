@@ -94,9 +94,49 @@ void BlitConsole(console*);
 /*
 	BEGIN INPUT EVENTS
 */
+#define KEYCODES \
+	_(KEY_NONE, '\0') \
+	_(KEY_ESCAPE, '\0') \
+	_(KEY_A, 'a') \
+	_(KEY_B, 'b') \
+	_(KEY_C, 'c') \
+	_(KEY_D, 'd') \
+	_(KEY_E, 'e') \
+	_(KEY_F, 'f') \
+	_(KEY_G, 'g') \
+	_(KEY_H, 'h') \
+	_(KEY_I, 'i') \
+	_(KEY_J, 'j') \
+	_(KEY_K, 'k') \
+	_(KEY_L, 'l') \
+	_(KEY_M, 'm') \
+	_(KEY_N, 'n') \
+	_(KEY_O, 'o') \
+	_(KEY_P, 'p') \
+	_(KEY_Q, 'q') \
+	_(KEY_R, 'r') \
+	_(KEY_S, 's') \
+	_(KEY_T, 't') \
+	_(KEY_U, 'u') \
+	_(KEY_V, 'v') \
+	_(KEY_W, 'w') \
+	_(KEY_X, 'x') \
+	_(KEY_Y, 'y') \
+	_(KEY_Z, 'z')
+
+typedef enum keycode
+{
+#define _(CODE, CHAR) CODE,
+	KEYCODES
+#undef _
+}
+keycode;
+
+char KeycodeToChar(keycode);
+
 typedef struct input_event
 {
-	char C;
+	keycode Key;
 	bool KeyDown;
 	bool KeyUp;
 }
