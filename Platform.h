@@ -97,6 +97,7 @@ void BlitConsole(console*);
 #define KEYCODES \
 	_(KEY_NONE, '\0') \
 	_(KEY_ESCAPE, '\0') \
+	_(KEY_SPACE, ' ') \
 	_(KEY_A, 'a') \
 	_(KEY_B, 'b') \
 	_(KEY_C, 'c') \

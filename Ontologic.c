@@ -23,7 +23,10 @@ void Main(console* console, input_buffer* inputBuffer)
 					quit = true;
 
 				else if (event->KeyDown)
-					buffer[i++] = KeycodeToChar(event->Key);
+				{
+					char c = KeycodeToChar(event->Key);
+					if (c != '\0') buffer[i++] = c;
+				}
 			}
 		}
 

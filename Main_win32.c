@@ -314,6 +314,9 @@ keycode VirtualKeyToKeyCode(WORD virtualKey)
 	case VK_ESCAPE:
 		return KEY_ESCAPE;
 
+	case VK_SPACE:
+		return KEY_SPACE;
+
 	case 0x41:
 		return KEY_A;
 
