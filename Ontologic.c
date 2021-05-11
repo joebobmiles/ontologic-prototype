@@ -6,17 +6,25 @@ void Main(console* console, input_buffer* inputBuffer)
 {
 	bool quit = false;
 
+	size i = 0;
+	char buffer[1024];
+
 	until (quit == true)
 	{
-		ConsoleWrite(console, "Hello, World!", 13);
+		ConsoleWrite(console, buffer, i);
 
 		InputBufferRead(inputBuffer);
 		if (0 < inputBuffer->EventCount)
 		{
-			input_event* event = PopInputEventFrom(inputBuffer);
+			input_event* event;
+			until((event = PopInputEventFrom(inputBuffer)) == NULL)
+			{
+				if (event->KeyUp && event->C == 'q')
+					quit = true;
 
-			if (event->KeyUp && event->C == 'q')
-				quit = true;
+				else if (event->KeyDown)
+					buffer[i++] = event->C;
+			}
 		}
 
 		BlitConsole(console);

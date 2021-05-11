@@ -267,13 +267,10 @@ i32 ConsoleWriteLineF(
 internal
 i32 InputBufferRead(input_buffer* inputBuffer)
 {
+	persist INPUT_RECORD inputRecords[64];
+
 	u32 numberOfEvents;
 	GetNumberOfConsoleInputEvents(Platform.hStandardInput, &numberOfEvents);
-
-	persist PINPUT_RECORD inputRecords = NULL;
-	
-	if (inputRecords == NULL)
-		inputRecords = Allocate(sizeof(INPUT_RECORD) * numberOfEvents);
 
 	u32 eventsRead;
 	ReadConsoleInputA(
