@@ -4,9 +4,9 @@
 internal
 void Main(console* console, input_buffer* inputBuffer)
 {
-	bool quit = 0;
+	bool quit = false;
 
-	while (!quit)
+	until (quit == true)
 	{
 		InputBufferRead(inputBuffer);
 
@@ -15,7 +15,7 @@ void Main(console* console, input_buffer* inputBuffer)
 			input_event* event = PopInputEventFrom(inputBuffer);
 
 			if (event->KeyUp && event->C == 'q')
-				quit = 1;
+				quit = true;
 		}
 
 		BlitConsole(console);

@@ -74,6 +74,15 @@ typedef long double	__ontologic_float128;
 */
 
 /*
+	BEGIN BOOLEAN CONSTANTS
+*/
+#define true	((bool)1)
+#define false	((bool)0)
+/*
+	END BOOLEAN CONSTANTS
+*/
+
+/*
 	BEGIN STATIC ALIAS MACROS
 */
 #define global static
@@ -113,7 +122,8 @@ typedef long double	__ontologic_float128;
 /*
 	BEGIN UTILITY MACROS
 */
-#define forever while (1)
+#define forever		while (1)
+#define until(P)	while (!(P))
 /*
 	END UTILITY MACROS
 */
