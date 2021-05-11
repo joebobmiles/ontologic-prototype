@@ -125,7 +125,17 @@ void ClearConsole(console*);
 	_(KEY_W, 'w') \
 	_(KEY_X, 'x') \
 	_(KEY_Y, 'y') \
-	_(KEY_Z, 'z')
+	_(KEY_Z, 'z') \
+	_(KEY_0, '0') \
+	_(KEY_1, '1') \
+	_(KEY_2, '2') \
+	_(KEY_3, '3') \
+	_(KEY_4, '4') \
+	_(KEY_5, '5') \
+	_(KEY_6, '6') \
+	_(KEY_7, '7') \
+	_(KEY_8, '8') \
+	_(KEY_9, '9')
 
 typedef enum keycode
 {

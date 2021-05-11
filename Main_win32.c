@@ -327,6 +327,36 @@ keycode VirtualKeyToKeyCode(WORD virtualKey)
 	case VK_BACK:
 		return KEY_BACKSPACE;
 
+	case 0x30:
+		return KEY_0;
+
+	case 0x31:
+		return KEY_1;
+
+	case 0x32:
+		return KEY_2;
+
+	case 0x33:
+		return KEY_3;
+
+	case 0x34:
+		return KEY_4;
+
+	case 0x35:
+		return KEY_5;
+
+	case 0x36:
+		return KEY_6;
+
+	case 0x37:
+		return KEY_7;
+
+	case 0x38:
+		return KEY_8;
+
+	case 0x39:
+		return KEY_9;
+
 	case 0x41:
 		return KEY_A;
 
