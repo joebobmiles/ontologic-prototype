@@ -3,12 +3,21 @@
 
 #include "Standard.h"
 
+/**
+ * A struct used to collect together data relevant to the current platform.
+ * This is only used by functions that need to invoke the platform directly,
+ * and intended to be stored as a global.
+ *
+ * Since the contents of this struct will need to change on a per-platform basis,
+ * it is left only declared right now, but not defined.
+ */
 struct platform;
 
 /*
 	BEGIN EXIT
 */
 
+/* Defines exit codes that are used when terminating the process. */
 typedef enum exit_code
 {
 	EXIT_NORMAL,
@@ -84,7 +93,21 @@ void _AssertWithMessage(
 		(P), "Assertion failed: " ## M, sizeof("Assertion failed: " ## M) \
 	)
 
+/**
+ * The underlying function invoked when an abort is performed.
+ * 
+ * @param[in]	exitCode		The code to exit with.
+ * @param[in]	message			The message to report after abort.
+ * @param[in]	messageLength	The length of the abort message.
+ */
 void _Abort(exit_code, const char*, const size);
+
+/**
+ * Exits the process with the given error code and reports the given message.
+ * 
+ * @param[in]	exitCode	The code to exit with.
+ * @param[in]	message		The message, as string literal, to report.
+ */
 #define Abort(C, M) _Abort(C, "Aborted: " ## M, sizeof("Aborted: " ## M))
 /*
 	END ASSERT & ABORT
@@ -93,6 +116,8 @@ void _Abort(exit_code, const char*, const size);
 /*
 	BEGIN MEMORY
 */
+
+/* A global memory pool used for internal allocations. */
 typedef struct memory_arena
 {
 	void* Start;
@@ -101,10 +126,30 @@ typedef struct memory_arena
 }
 memory_arena;
 
+/**
+ * Initializes a memory_arena to the specified size.
+ * 
+ * @param[in|out]	memoryArena	The arena to setup.
+ * @param[in]		size		The size to initialize the arena as.
+ */
 void SetupMemoryArena(memory_arena*, const size);
+
+/**
+ * Frees the memory allocated to the memory_arena.
+ *
+ * @param[in|out]	memoryArena	The arena to teardown.
+ */
 void TeardownMemoryArena(memory_arena*);
 
+/**
+ * Allocates memory in the (global) memory arena for use elsewhere.
+ *
+ * @param[in]	allocationSize	The amount of memory, in bytes, to allocate.
+ *
+ * @return	A pointer to the allocated memory.
+ */
 void* Allocate(const size allocationSize);
+
 /*
 	END MEMORY
 */
@@ -112,6 +157,8 @@ void* Allocate(const size allocationSize);
 /*
 	BEGIN CONSOLE
 */
+
+/* Defines a platform-independent console for use by the rest of process. */
 typedef struct console
 {
 	char* Buffer;
@@ -123,13 +170,70 @@ typedef struct console
 }
 console;
 
+/**
+ * Writes the given string to the console at the current cursor position.
+ * 
+ * @param[in|out]	console			The console to write to.
+ * @param[in]		string			The string to write to the console.
+ * @param[in]		stringLength	The length of the string being written.
+ *
+ * @return	The number of characters written to the console.
+ */
 i32 ConsoleWrite(console*, const char*, const size);
+
+/**
+ * Writes the given format string to the console using the arguments at the tail
+ * of the argument list.
+ * 
+ * @param[in|out]	console			The console to write to.
+ * @param[in]		format			The format string to use.
+ * @param[in]		formatLength	The length of the format string.
+ * @param[in]		...				The arguments to use during formatting.
+ * 
+ * @return	The number of characters written to the console.
+ */
 i32 ConsoleWriteF(console*, const char*, const size, ...);
+
+/**
+ * Writes the given string to the console at the current cursor position. Once
+ * finished, it moves the cursor down one line.
+ *
+ * @param[in|out]	console			The console to write to.
+ * @param[in]		string			The string to write to the console.
+ * @param[in]		stringLength	The length of the string being written.
+ *
+ * @return	The number of characters written to the console.
+ */
 i32 ConsoleWriteLine(console*, const char*, const size);
+
+/**
+ * Writes the given format string to the console at the current cursor position,
+ * using the arguments at the tail of the argument list. Once finished, it moves
+ * the cursor down one line.
+ *
+ * @param[in|out]	console			The console to write to.
+ * @param[in]		format			The string to write to the console.
+ * @param[in]		formatLength	The length of the string being written.
+ * @param[in]		...				The arguments to use during formatting.
+ *
+ * @return	The number of characters written to the console.
+ */
 i32 ConsoleWriteLineF(console*, const char*, const size, ...);
 
+/**
+ * "Blits" the console buffer to the platform's console.
+ *
+ * @param[in]	console	The console to blit.
+ */
 void BlitConsole(console*);
+
+/**
+ * Clears the console buffer with '\0'.
+ *
+ * @param[in|out]	console	The console to clear.
+ */
 void ClearConsole(console*);
+
 /*
 	END CONSOLE
 */
@@ -137,6 +241,8 @@ void ClearConsole(console*);
 /*
 	BEGIN INPUT EVENTS
 */
+
+/* Platform independent keycodes. */
 #define KEYCODES \
 	_(KEY_NONE) \
 	_(KEY_ESCAPE) \
@@ -181,6 +287,7 @@ void ClearConsole(console*);
 	_(KEY_8) \
 	_(KEY_9)
 
+/* Platform independent keycodes. */
 typedef enum keycode
 {
 #define _(CODE) CODE,
@@ -189,9 +296,7 @@ typedef enum keycode
 }
 keycode;
 
-/*
-Represents a single input event received from the host system.
-*/
+/* Represents a single input event received from the host system. */
 typedef struct input_event
 {
 	/* The virtual key code that we received. */
@@ -206,9 +311,7 @@ typedef struct input_event
 }
 input_event;
 
-/*
-A circular buffer that stores input events received from the host system.
-*/
+/* A circular buffer that stores input events received from the host system. */
 typedef struct input_buffer
 {
 	/* The events we received from the host. */
@@ -225,9 +328,34 @@ typedef struct input_buffer
 }
 input_buffer;
 
+/**
+ * Reads input events from the host system and places them in the given input
+ * buffer.
+ *	
+ * @param[in|out]	inputBuffer	The buffer to store events in.
+ * 
+ * @return	The number of events written to the buffer.
+ */
 i32 InputBufferRead(input_buffer*);
+
+/**
+ * Pops the first event off the input buffer.
+ * 
+ * @param[in|out]	inputBuffer	The buffer to get the event from.
+ * 
+ * @return	A pointer to the input event popped off the buffer.
+ */
 input_event* PopInputEventFrom(input_buffer*);
+
+/**
+ * Gives a reference to the input event at the front of the input buffer.
+ *
+ * @param[in]	inputBuffer The buffer to get the event from.
+ *
+ * @return	A pointer to the input event at the front of the buffer.
+ */
 input_event* PeekInputEventFrom(input_buffer*);
+
 /*
 	END INPUT EVENTS
 */
