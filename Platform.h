@@ -14,17 +14,17 @@
 struct platform;
 
 /*
-	BEGIN EXIT
+    BEGIN EXIT
 */
 
 /* Defines exit codes that are used when terminating the process. */
 typedef enum exit_code
 {
-	EXIT_NORMAL,
-	EXIT_ASSERT_FAILED,
-	EXIT_SYSTEM_OUT_OF_MEMORY,
-	EXIT_COULD_NOT_SET_ACTIVE_SCREEN_BUFFER,
-	EXIT_COULD_NOT_GET_SCREEN_BUFFER_INFO,
+    EXIT_NORMAL,
+    EXIT_ASSERT_FAILED,
+    EXIT_SYSTEM_OUT_OF_MEMORY,
+    EXIT_COULD_NOT_SET_ACTIVE_SCREEN_BUFFER,
+    EXIT_COULD_NOT_GET_SCREEN_BUFFER_INFO,
 }
 exit_code;
 
@@ -36,11 +36,11 @@ exit_code;
 void Exit(exit_code);
 
 /*
-	END EXIT
+    END EXIT
 */
 
 /*
-	BEGIN ASSERT & ABORT
+    BEGIN ASSERT & ABORT
 */
 
 /**
@@ -55,7 +55,7 @@ void Exit(exit_code);
  * @param[in]	line					The line of the file the assertion is on.
  */
 void _Assert(
-	const bool, const char*, const size, const char*, const size, const size
+    const bool, const char*, const size, const char*, const size, const size
 );
 
 /**
@@ -65,9 +65,9 @@ void _Assert(
  * @param[in]	predicate	The predicate to verify.
  */
 #define Assert(P) \
-	_Assert( \
-		(P), #P, sizeof(#P)-1, __FILE__, sizeof(__FILE__)-1, __LINE__ \
-	)
+    _Assert( \
+        (P), #P, sizeof(#P)-1, __FILE__, sizeof(__FILE__)-1, __LINE__ \
+    )
 
 /**
  * The underlying function to use when assertions are enabled. This is not
@@ -78,7 +78,7 @@ void _Assert(
  * @param[in]	messageLength	The length of the given message.
  */
 void _AssertWithMessage(
-	const bool, const char*, const size
+    const bool, const char*, const size
 );
 
 /**
@@ -89,9 +89,9 @@ void _AssertWithMessage(
  * @param[in]	message		The message to display on assertion failure.
  */
 #define AssertWithMessage(P, M) \
-	_AssertWithMessage( \
-		(P), "Assertion failed: " ## M, sizeof("Assertion failed: " ## M) \
-	)
+    _AssertWithMessage( \
+        (P), "Assertion failed: " ## M, sizeof("Assertion failed: " ## M) \
+    )
 
 /**
  * The underlying function invoked when an abort is performed.
@@ -110,19 +110,19 @@ void _Abort(exit_code, const char*, const size);
  */
 #define Abort(C, M) _Abort(C, "Aborted: " ## M, sizeof("Aborted: " ## M))
 /*
-	END ASSERT & ABORT
+    END ASSERT & ABORT
 */
 
 /*
-	BEGIN MEMORY
+    BEGIN MEMORY
 */
 
 /* A global memory pool used for internal allocations. */
 typedef struct memory_arena
 {
-	void* Start;
-	void* Cursor;
-	size Size;
+    void* Start;
+    void* Cursor;
+    size Size;
 }
 memory_arena;
 
@@ -151,22 +151,22 @@ void TeardownMemoryArena(memory_arena*);
 void* Allocate(const size allocationSize);
 
 /*
-	END MEMORY
+    END MEMORY
 */
 
 /*
-	BEGIN CONSOLE
+    BEGIN CONSOLE
 */
 
 /* Defines a platform-independent console for use by the rest of process. */
 typedef struct console
 {
-	char* Buffer;
-	size BufferWidth;
-	size BufferHeight;
+    char* Buffer;
+    size BufferWidth;
+    size BufferHeight;
 
-	i16 CursorTop;
-	i16 CursorLeft;
+    i16 CursorTop;
+    i16 CursorLeft;
 }
 console;
 
@@ -235,63 +235,63 @@ void BlitConsole(console*);
 void ClearConsole(console*);
 
 /*
-	END CONSOLE
+    END CONSOLE
 */
 
 /*
-	BEGIN INPUT EVENTS
+    BEGIN INPUT EVENTS
 */
 
 /* Platform independent keycodes. */
 #define KEYCODES \
-	_(KEY_NONE) \
-	_(KEY_ESCAPE) \
-	_(KEY_SPACE) \
-	_(KEY_BACKSPACE) \
+    _(KEY_NONE) \
+    _(KEY_ESCAPE) \
+    _(KEY_SPACE) \
+    _(KEY_BACKSPACE) \
 \
-	_(KEY_A) \
-	_(KEY_B) \
-	_(KEY_C) \
-	_(KEY_D) \
-	_(KEY_E) \
-	_(KEY_F) \
-	_(KEY_G) \
-	_(KEY_H) \
-	_(KEY_I) \
-	_(KEY_J) \
-	_(KEY_K) \
-	_(KEY_L) \
-	_(KEY_M) \
-	_(KEY_N) \
-	_(KEY_O) \
-	_(KEY_P) \
-	_(KEY_Q) \
-	_(KEY_R) \
-	_(KEY_S) \
-	_(KEY_T) \
-	_(KEY_U) \
-	_(KEY_V) \
-	_(KEY_W) \
-	_(KEY_X) \
-	_(KEY_Y) \
-	_(KEY_Z) \
+    _(KEY_A) \
+    _(KEY_B) \
+    _(KEY_C) \
+    _(KEY_D) \
+    _(KEY_E) \
+    _(KEY_F) \
+    _(KEY_G) \
+    _(KEY_H) \
+    _(KEY_I) \
+    _(KEY_J) \
+    _(KEY_K) \
+    _(KEY_L) \
+    _(KEY_M) \
+    _(KEY_N) \
+    _(KEY_O) \
+    _(KEY_P) \
+    _(KEY_Q) \
+    _(KEY_R) \
+    _(KEY_S) \
+    _(KEY_T) \
+    _(KEY_U) \
+    _(KEY_V) \
+    _(KEY_W) \
+    _(KEY_X) \
+    _(KEY_Y) \
+    _(KEY_Z) \
 \
-	_(KEY_0) \
-	_(KEY_1) \
-	_(KEY_2) \
-	_(KEY_3) \
-	_(KEY_4) \
-	_(KEY_5) \
-	_(KEY_6) \
-	_(KEY_7) \
-	_(KEY_8) \
-	_(KEY_9)
+    _(KEY_0) \
+    _(KEY_1) \
+    _(KEY_2) \
+    _(KEY_3) \
+    _(KEY_4) \
+    _(KEY_5) \
+    _(KEY_6) \
+    _(KEY_7) \
+    _(KEY_8) \
+    _(KEY_9)
 
 /* Platform independent keycodes. */
 typedef enum keycode
 {
 #define _(CODE) CODE,
-	KEYCODES
+    KEYCODES
 #undef _
 }
 keycode;
@@ -299,32 +299,32 @@ keycode;
 /* Represents a single input event received from the host system. */
 typedef struct input_event
 {
-	/* The virtual key code that we received. */
-	keycode Key;
-	/* True when the key is down, false when the key is up. */
-	bool KeyDown;
-	/* True when the key is up, false when the key is down. */
-	bool KeyUp;
+    /* The virtual key code that we received. */
+    keycode Key;
+    /* True when the key is down, false when the key is up. */
+    bool KeyDown;
+    /* True when the key is up, false when the key is down. */
+    bool KeyUp;
 
-	/* The character that was typed. */
-	char Character;
+    /* The character that was typed. */
+    char Character;
 }
 input_event;
 
 /* A circular buffer that stores input events received from the host system. */
 typedef struct input_buffer
 {
-	/* The events we received from the host. */
-	input_event* Events;
-	/* The number of events we are storing. */
-	size EventCount;
-	/* The maximum number of events that can be stored in the buffer. */
-	size MaxEventCount;
+    /* The events we received from the host. */
+    input_event* Events;
+    /* The number of events we are storing. */
+    size EventCount;
+    /* The maximum number of events that can be stored in the buffer. */
+    size MaxEventCount;
 
-	/* The index to the head of the buffer. */
-	size HeadIndex;
-	/* The index to the tail of the buffer. */
-	size TailIndex;
+    /* The index to the head of the buffer. */
+    size HeadIndex;
+    /* The index to the tail of the buffer. */
+    size TailIndex;
 }
 input_buffer;
 
@@ -357,7 +357,7 @@ input_event* PopInputEventFrom(input_buffer*);
 input_event* PeekInputEventFrom(input_buffer*);
 
 /*
-	END INPUT EVENTS
+    END INPUT EVENTS
 */
 
 #endif

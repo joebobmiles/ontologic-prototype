@@ -4,52 +4,52 @@
 #define NULL 0
 
 /*
-	BEGIN size_t DEFINITION
+    BEGIN size_t DEFINITION
 */
 
 #define _TYPEDEF_SIZE_T(T) \
-	typedef T __ontologic_size_t;
+    typedef T __ontologic_size_t;
 
 #if defined(__SIZE_TYPE__)
-	_TYPEDEF_SIZE_T(__SIZE_TYPE__)
+    _TYPEDEF_SIZE_T(__SIZE_TYPE__)
 #elif defined(_WIN64)
-	_TYPEDEF_SIZE_T(unsigned long)
+    _TYPEDEF_SIZE_T(unsigned long)
 #elif defined(_WIN32)
-	_TYPEDEF_SIZE_T(unsigned long int)
+    _TYPEDEF_SIZE_T(unsigned long int)
 #else
-	#error Unable to define size_t!
+    #error Unable to define size_t!
 #endif
 
 #define size __ontologic_size_t
 
 /*
-	END size_t DEFINITION
+    END size_t DEFINITION
 */
 
 /*
-	BEGIN NUMERIC TYPE DEFINITION
+    BEGIN NUMERIC TYPE DEFINITION
 */
 
 #if defined(_WIN64)
-	typedef char				__ontologic_int8;
-	typedef short				__ontologic_int16;
-	typedef int					__ontologic_int32;
-	typedef long				__ontologic_int64;
+    typedef char				__ontologic_int8;
+    typedef short				__ontologic_int16;
+    typedef int					__ontologic_int32;
+    typedef long				__ontologic_int64;
 
-	typedef unsigned char		__ontologic_uint8;
-	typedef unsigned short		__ontologic_uint16;
-	typedef unsigned int		__ontologic_uint32;
-	typedef unsigned long		__ontologic_uint64;
+    typedef unsigned char		__ontologic_uint8;
+    typedef unsigned short		__ontologic_uint16;
+    typedef unsigned int		__ontologic_uint32;
+    typedef unsigned long		__ontologic_uint64;
 #elif defined(_WIN32)
-	typedef char				__ontologic_int8;
-	typedef short				__ontologic_int16;
-	typedef int					__ontologic_int32;
-	typedef long long			__ontologic_int64;
+    typedef char				__ontologic_int8;
+    typedef short				__ontologic_int16;
+    typedef int					__ontologic_int32;
+    typedef long long			__ontologic_int64;
 
-	typedef unsigned char		__ontologic_uint8;
-	typedef unsigned short		__ontologic_uint16;
-	typedef unsigned int		__ontologic_uint32;
-	typedef unsigned long long	__ontologic_uint64;
+    typedef unsigned char		__ontologic_uint8;
+    typedef unsigned short		__ontologic_uint16;
+    typedef unsigned int		__ontologic_uint32;
+    typedef unsigned long long	__ontologic_uint64;
 #endif
 
 typedef float		__ontologic_float32;
@@ -74,22 +74,22 @@ typedef long double	__ontologic_float128;
 #define f128	__ontologic_float128;
 
 /*
-	END NUMERIC TYPE DEFINITION
+    END NUMERIC TYPE DEFINITION
 */
 
 /*
-	BEGIN BOOLEAN CONSTANTS
+    BEGIN BOOLEAN CONSTANTS
 */
 
 #define true	((bool)1)
 #define false	((bool)0)
 
 /*
-	END BOOLEAN CONSTANTS
+    END BOOLEAN CONSTANTS
 */
 
 /*
-	BEGIN STATIC ALIAS MACROS
+    BEGIN STATIC ALIAS MACROS
 */
 
 #define global static
@@ -97,11 +97,11 @@ typedef long double	__ontologic_float128;
 #define persist static
 
 /*
-	END STATIC ALIAS MACROS
+    END STATIC ALIAS MACROS
 */
 
 /*
-	BEGIN MEMORY SIZE MACROS
+    BEGIN MEMORY SIZE MACROS
 */
 
 /**
@@ -132,11 +132,11 @@ typedef long double	__ontologic_float128;
 #define Gigabyte(N) (Megabyte(N) * 1024ull)
 
 /*
-	END MEMORY SIZE MACROS
+    END MEMORY SIZE MACROS
 */
 
 /*
-	BEGIN MACRO UTILITY MACROS
+    BEGIN MACRO UTILITY MACROS
 */
 
 #define __JOIN(A, B) A ## B
@@ -153,44 +153,44 @@ typedef long double	__ontologic_float128;
 #define _JOIN(A, B) __JOIN(A, B)
 
 #if defined(__COUNTER__)
-	/**
-	 * Creates a temporary variable name for use in macros.
-	 *
-	 * @param[in]	prefix	The prefix to use for the temporary variable.
-	 * 
-	 * @return	A contextually unique identifier with the given prefix.
-	 */
-	#define TEMP(P) _JOIN(P##_, __COUNTER__)
+    /**
+     * Creates a temporary variable name for use in macros.
+     *
+     * @param[in]	prefix	The prefix to use for the temporary variable.
+     * 
+     * @return	A contextually unique identifier with the given prefix.
+     */
+    #define TEMP(P) _JOIN(P##_, __COUNTER__)
 #elif defined(__LINE__) && defined(__FUNCTION__)
-	/**
-	 * Creates a temporary variable name for use in macros.
-	 *
-	 * @param	prefix	The prefix to use for the temporary variable.
-	 * 
-	 * @return	A contextually unique identifier with the given prefix.
-	 */
-	#define TEMP(P) _JOIN(P##_, JOIN(__FUNCTION__, __LINE__))
+    /**
+     * Creates a temporary variable name for use in macros.
+     *
+     * @param	prefix	The prefix to use for the temporary variable.
+     * 
+     * @return	A contextually unique identifier with the given prefix.
+     */
+    #define TEMP(P) _JOIN(P##_, JOIN(__FUNCTION__, __LINE__))
 #else
-	#error Unable to define TEMP()!
+    #error Unable to define TEMP()!
 #endif
 
 /*
-	END MACRO UTILITY MACROS
+    END MACRO UTILITY MACROS
 */
 
 /*
-	BEGIN UTILITY MACROS
+    BEGIN UTILITY MACROS
 */
 
 #define forever		while (1)
 #define until(P)	while (!(P))
 
 /*
-	END UTILITY MACROS
+    END UTILITY MACROS
 */
 
 /*
-	BEGIN STANDARD LIBRARY MACROS
+    BEGIN STANDARD LIBRARY MACROS
 */
 
 /**
@@ -212,11 +212,11 @@ typedef long double	__ontologic_float128;
  * @param[in]		t	The name of the temporary variable to swap with.
  */
 #define _Swap(T, a, b, t) \
-	{ \
-		T t = a; \
-		a = b; \
-		b = t; \
-	}
+    { \
+        T t = a; \
+        a = b; \
+        b = t; \
+    }
 
 /**
  * Swaps the value of a and b.
@@ -228,11 +228,11 @@ typedef long double	__ontologic_float128;
 #define Swap(T, a, b) _Swap(T, a, b, TEMP(t))
 
 /*
-	END STANDARD LIBRARY MACROS
+    END STANDARD LIBRARY MACROS
 */
 
 /*
-	BEGIN VARIADIC FUNCTION MACROS
+    BEGIN VARIADIC FUNCTION MACROS
 */
 
 typedef void* __ontologic_arg_list;
@@ -245,7 +245,7 @@ typedef void* __ontologic_arg_list;
  * @param[in]		a	The last argument before the variable argument list.
  */
 #define SetupArgList(l, a) \
-	l = (void*)((size)(&(a)) + sizeof((a)))
+    l = (void*)((size)(&(a)) + sizeof((a)))
 
 /**
  * The underlying function that pops an argument off the argument list.
@@ -257,9 +257,9 @@ typedef void* __ontologic_arg_list;
  */
 internal inline void* _PopArg(arg_list* args, size argSize)
 {
-	void* arg = *args;
-	*args = (void*)((size)*args + (size)argSize);
-	return arg;
+    void* arg = *args;
+    *args = (void*)((size)*args + (size)argSize);
+    return arg;
 }
 
 /**
@@ -290,11 +290,11 @@ internal inline void* _PopArg(arg_list* args, size argSize)
 #define TeardownArgList(l) l = NULL
 
 /*
-	END VARIADIC FUNCTION MACROS
+    END VARIADIC FUNCTION MACROS
 */
 
 /*
-	BEGIN STANDARD PROCEDURES
+    BEGIN STANDARD PROCEDURES
 */
 
 /**
@@ -308,36 +308,36 @@ internal inline void* _PopArg(arg_list* args, size argSize)
  */
 internal size ItoA(char* buffer, size bufferSize, i32 n)
 {
-	if (bufferSize == 0) return 0;
-	if (n == 0)
-	{
-		buffer[0] = '0';
-		return 1;
-	}
+    if (bufferSize == 0) return 0;
+    if (n == 0)
+    {
+        buffer[0] = '0';
+        return 1;
+    }
 
-	unsigned int isNegative = n < 0;
-	n = Abs(n);
+    unsigned int isNegative = n < 0;
+    n = Abs(n);
 
-	size i = 0;
-	while (n != 0 && i < bufferSize)
-	{
-		buffer[i++] = (char)((n % 10) + 48);
-		n /= 10;
-	}
+    size i = 0;
+    while (n != 0 && i < bufferSize)
+    {
+        buffer[i++] = (char)((n % 10) + 48);
+        n /= 10;
+    }
 
-	buffer[i] = isNegative * '-';
-	i += isNegative;
+    buffer[i] = isNegative * '-';
+    i += isNegative;
 
-	size charsWritten = i;
+    size charsWritten = i;
 
-	size start = 0, end = --i;
-	while (start < end)
-	{
-		Swap(char, buffer[start], buffer[end]);
-		start++; end--;
-	}
+    size start = 0, end = --i;
+    while (start < end)
+    {
+        Swap(char, buffer[start], buffer[end]);
+        start++; end--;
+    }
 
-	return charsWritten;
+    return charsWritten;
 }
 
 /**
@@ -353,70 +353,70 @@ internal size ItoA(char* buffer, size bufferSize, i32 n)
  * @return	The number of characters written to the buffer.
  */
 internal size _FormatString(
-	char* buffer,
-	size bufferSize,
-	const char* format,
-	size formatSize,
-	arg_list args
+    char* buffer,
+    size bufferSize,
+    const char* format,
+    size formatSize,
+    arg_list args
 )
 {
-	size charsWritten = 0;
-	for (size i = 0; i < formatSize; i++)
-	{
-		if (bufferSize <= charsWritten)
-			break;
+    size charsWritten = 0;
+    for (size i = 0; i < formatSize; i++)
+    {
+        if (bufferSize <= charsWritten)
+            break;
 
-		char c = format[i];
+        char c = format[i];
 
-		if (c != '%' || formatSize <= i + 1)
-		{
-			buffer[charsWritten++] = c;
-		}
+        if (c != '%' || formatSize <= i + 1)
+        {
+            buffer[charsWritten++] = c;
+        }
 
-		else
-		{
-			switch (format[i+1])
-			{
-			case 'c':
-			{
-				buffer[charsWritten] = PopArg(args, char);
-				charsWritten++;
-			} break;
+        else
+        {
+            switch (format[i+1])
+            {
+            case 'c':
+            {
+                buffer[charsWritten] = PopArg(args, char);
+                charsWritten++;
+            } break;
 
-			case 'i':
-			{
-				charsWritten += ItoA(
-					(char*)((size)buffer + charsWritten),
-					bufferSize - charsWritten,
-					PopArg(args, int)
-				);
-			} break;
+            case 'i':
+            {
+                charsWritten += ItoA(
+                    (char*)((size)buffer + charsWritten),
+                    bufferSize - charsWritten,
+                    PopArg(args, int)
+                );
+            } break;
 
-			case 's':
-			{
-				char* s = PopArg(args, char*);
-				size sLength = PopArg(args, size);
+            case 's':
+            {
+                char* s = PopArg(args, char*);
+                size sLength = PopArg(args, size);
 
-				for (size j = 0; j < sLength; j++)
-				{
-					if (charsWritten < bufferSize)
-						buffer[charsWritten++] = s[j];
+                for (size j = 0; j < sLength; j++)
+                {
+                    if (charsWritten < bufferSize)
+                        buffer[charsWritten++] = s[j];
 
-					else break;
-				}
-			} break;
+                    else break;
+                }
+            } break;
 
-			default:
-			{
-				buffer[i] = c;
-			} break;
-			}
+            default:
+            {
+                buffer[i] = c;
+            } break;
+            }
 
-			i++;
-		}
-	}
+            i++;
+        }
+    }
 
-	return charsWritten;
+    return charsWritten;
 }
 
 /**
@@ -432,31 +432,31 @@ internal size _FormatString(
  * @return	The number of characters written to the buffer.
  */
 internal size FormatString(
-	char* buffer,
-	size bufferSize,
-	const char* format,
-	size formatSize,
-	...
+    char* buffer,
+    size bufferSize,
+    const char* format,
+    size formatSize,
+    ...
 )
 {
-	arg_list args;
-	SetupArgList(args, formatSize);
-	
-	size charsWritten = _FormatString(
-		buffer,
-		bufferSize,
-		format,
-		formatSize,
-		args
-	);
+    arg_list args;
+    SetupArgList(args, formatSize);
+    
+    size charsWritten = _FormatString(
+        buffer,
+        bufferSize,
+        format,
+        formatSize,
+        args
+    );
 
-	TeardownArgList(args);
+    TeardownArgList(args);
 
-	return charsWritten;
+    return charsWritten;
 }
 
 /*
-	END STANDARD PROCEDURES
+    END STANDARD PROCEDURES
 */
 
 #endif
